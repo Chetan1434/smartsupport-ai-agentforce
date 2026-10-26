@@ -1,0 +1,182 @@
+<template>
+    <lightning-card title="Case Actions" icon-name="standard:case">
+        <div class="slds-var-p-horizontal_medium panel-body">
+            <template if:true={isBusy}>
+                <lightning-spinner alternative-text="Working" size="small"></lightning-spinner>
+            </template>
+
+            <div class="slds-text-body_small slds-var-m-bottom_small">
+                <template if:true={hasActiveCase}>
+                    Working on case <strong>{activeCaseLabel}</strong>
+                </template>
+                <template if:false={hasActiveCase}>
+                    No case selected. Create a case or look one up first.
+                </template>
+            </div>
+
+            <template if:true={feedback}>
+                <div class={feedbackClass} role="status" aria-live="polite">{feedback.message}</div>
+            </template>
+
+            <lightning-tabset variant="scoped">
+                <lightning-tab label="Create case">
+                    <lightning-input
+                        label="Subject"
+                        name="subject"
+                        required
+                        max-length="255"
+                        value={subject}
+                        onchange={handleFieldChange}
+                    ></lightning-input>
+                    <lightning-textarea
+                        label="Description"
+                        name="description"
+                        max-length="32000"
+                        value={description}
+                        onchange={handleFieldChange}
+                    ></lightning-textarea>
+                    <lightning-combobox
+                        label="Priority (optional)"
+                        name="priority"
+                        value={priority}
+                        options={priorityOptions}
+                        placeholder="Let the rules decide"
+                        onchange={handleFieldChange}
+                    ></lightning-combobox>
+                    <lightning-button
+                        class="slds-var-m-top_small"
+                        label="Create case"
+                        variant="brand"
+                        disabled={isBusy}
+                        onclick={handleCreate}
+                    ></lightning-button>
+                </lightning-tab>
+
+                <lightning-tab label="Case status">
+                    <lightning-input
+                        label="Case number"
+                        name="caseNumber"
+                        max-length="30"
+                        value={caseNumber}
+                        onchange={handleFieldChange}
+                    ></lightning-input>
+                    <lightning-input
+                        label="Contact e-mail (required for customer-facing users)"
+                        name="contactEmail"
+                        type="email"
+                        value={contactEmail}
+                        onchange={handleFieldChange}
+                    ></lightning-input>
+                    <lightning-button
+                        class="slds-var-m-top_small"
+                        label="Get status"
+                        variant="brand"
+                        disabled={isBusy}
+                        onclick={handleStatus}
+                    ></lightning-button>
+
+                    <template if:true={statusResult}>
+                        <dl class="slds-list_horizontal slds-wrap slds-var-m-top_medium">
+                            <dt class="slds-item_label slds-text-color_weak">Case</dt>
+                            <dd class="slds-item_detail">{statusResult.caseNumber}: {statusResult.subject}</dd>
+                            <dt class="slds-item_label slds-text-color_weak">Status</dt>
+                            <dd class="slds-item_detail">{statusResult.status}</dd>
+                            <dt class="slds-item_label slds-text-color_weak">Priority</dt>
+                            <dd class="slds-item_detail">{statusResult.priority}</dd>
+                            <dt class="slds-item_label slds-text-color_weak">Last updated</dt>
+                            <dd class="slds-item_detail">{statusResult.lastUpdated}</dd>
+                            <dt class="slds-item_label slds-text-color_weak">Human attention</dt>
+                            <dd class="slds-item_detail">{humanAttentionText}</dd>
+                        </dl>
+                    </template>
+                </lightning-tab>
+
+                <lightning-tab label="Summarize">
+                    <p class="slds-var-m-bottom_small">
+                        Creates a short summary and next-action recommendation and saves them on the selected case.
+                    </p>
+                    <lightning-button
+                        label="Generate and save summary"
+                        variant="brand"
+                        disabled={isActionDisabled}
+                        onclick={handleSummarize}
+                    ></lightning-button>
+                    <template if:true={summaryResult}>
+                        <div class="slds-var-m-top_medium">
+                            <div class="slds-text-title">Summary</div>
+                            <p>{summaryResult.summary}</p>
+                            <div class="slds-text-title slds-var-m-top_small">Recommended action</div>
+                            <p>{summaryResult.recommendedAction}</p>
+                        </div>
+                    </template>
+                </lightning-tab>
+
+                <lightning-tab label="Comment">
+                    <lightning-textarea
+                        label="Comment"
+                        name="commentBody"
+                        max-length="4000"
+                        value={commentBody}
+                        onchange={handleFieldChange}
+                    ></lightning-textarea>
+                    <lightning-input
+                        type="checkbox"
+                        label="Visible to the customer"
+                        name="commentPublic"
+                        checked={commentPublic}
+                        onchange={handleCheckboxChange}
+                    ></lightning-input>
+                    <template if:true={commentPublic}>
+                        <p class="slds-text-color_error slds-text-body_small">
+                            Public comments are visible to the customer. Check the text carefully before posting.
+                        </p>
+                    </template>
+                    <lightning-button
+                        class="slds-var-m-top_small"
+                        label="Add comment"
+                        variant="brand"
+                        disabled={isActionDisabled}
+                        onclick={handleComment}
+                    ></lightning-button>
+                </lightning-tab>
+
+                <lightning-tab label="Escalate">
+                    <lightning-combobox
+                        label="Reason"
+                        name="reason"
+                        value={reason}
+                        options={reasonOptions}
+                        onchange={handleFieldChange}
+                    ></lightning-combobox>
+
+                    <template if:false={awaitingConfirmation}>
+                        <lightning-button
+                            class="slds-var-m-top_small"
+                            label="Escalate to a human"
+                            variant="destructive"
+                            disabled={isActionDisabled}
+                            onclick={handleEscalateClick}
+                        ></lightning-button>
+                    </template>
+
+                    <template if:true={awaitingConfirmation}>
+                        <div class="slds-box slds-theme_warning slds-var-m-top_small" role="alertdialog" aria-label="Confirm escalation">
+                            <p class="slds-var-m-bottom_small">
+                                This flags the case for human handoff, may raise its priority and re-route it to
+                                another queue. Do you want to continue?
+                            </p>
+                            <lightning-button label="Cancel" onclick={handleEscalateCancel}></lightning-button>
+                            <lightning-button
+                                class="slds-var-m-left_small"
+                                label="Confirm escalation"
+                                variant="destructive"
+                                disabled={isBusy}
+                                onclick={handleEscalateConfirm}
+                            ></lightning-button>
+                        </div>
+                    </template>
+                </lightning-tab>
+            </lightning-tabset>
+        </div>
+    </lightning-card>
+</template>

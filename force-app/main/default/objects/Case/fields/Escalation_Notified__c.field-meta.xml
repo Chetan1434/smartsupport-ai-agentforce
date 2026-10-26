@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Notified__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Set to true once the escalation notification was dispatched. Prevents duplicate notifications for the same escalation event.</description>
+    <externalId>false</externalId>
+    <label>Escalation Notified</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

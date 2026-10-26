@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0B5CAB</headerColor>
+        <shouldOverrideOrgTheme>true</shouldOverrideOrgTheme>
+    </brand>
+    <description>SmartSupport AI: intelligent case handling with human oversight.</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>SmartSupport AI</label>
+    <navType>Standard</navType>
+    <tabs>SmartSupport_Home</tabs>
+    <tabs>standard-Case</tabs>
+    <tabs>AI_Interaction_Log__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

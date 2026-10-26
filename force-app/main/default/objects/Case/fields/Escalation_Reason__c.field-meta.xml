@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Reason__c</fullName>
+    <description>Why the case was escalated or handed to a human. Set once; the first reason is kept.</description>
+    <externalId>false</externalId>
+    <label>Escalation Reason</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Security Concern</fullName>
+                <default>false</default>
+                <label>Security Concern</label>
+            </value>
+            <value>
+                <fullName>Widespread Outage</fullName>
+                <default>false</default>
+                <label>Widespread Outage</label>
+            </value>
+            <value>
+                <fullName>Customer Requested Human</fullName>
+                <default>false</default>
+                <label>Customer Requested Human</label>
+            </value>
+            <value>
+                <fullName>Repeated AI Failure</fullName>
+                <default>false</default>
+                <label>Repeated AI Failure</label>
+            </value>
+            <value>
+                <fullName>Insufficient Knowledge</fullName>
+                <default>false</default>
+                <label>Insufficient Knowledge</label>
+            </value>
+            <value>
+                <fullName>Premium Account High Priority</fullName>
+                <default>false</default>
+                <label>Premium Account High Priority</label>
+            </value>
+            <value>
+                <fullName>Manual Escalation</fullName>
+                <default>false</default>
+                <label>Manual Escalation</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,5 @@
+.panel-body {
+    position: relative;
+    min-height: 6rem;
+    padding-bottom: 1rem;
+}

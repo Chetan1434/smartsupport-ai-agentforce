@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interaction_Type__c</fullName>
+    <description>What kind of automated interaction this record describes.</description>
+    <externalId>false</externalId>
+    <label>Interaction Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Knowledge Search</fullName>
+                <default>false</default>
+                <label>Knowledge Search</label>
+            </value>
+            <value>
+                <fullName>Summary</fullName>
+                <default>false</default>
+                <label>Summary</label>
+            </value>
+            <value>
+                <fullName>Classification</fullName>
+                <default>false</default>
+                <label>Classification</label>
+            </value>
+            <value>
+                <fullName>Escalation</fullName>
+                <default>false</default>
+                <label>Escalation</label>
+            </value>
+            <value>
+                <fullName>Handoff</fullName>
+                <default>false</default>
+                <label>Handoff</label>
+            </value>
+            <value>
+                <fullName>Case Created</fullName>
+                <default>false</default>
+                <label>Case Created</label>
+            </value>
+            <value>
+                <fullName>Comment Added</fullName>
+                <default>false</default>
+                <label>Comment Added</label>
+            </value>
+            <value>
+                <fullName>Status Lookup</fullName>
+                <default>false</default>
+                <label>Status Lookup</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AI_Summary__c</fullName>
+    <description>Short summary of the case. Starts as a rule-based baseline summary and can be replaced by a validated AI summary.</description>
+    <externalId>false</externalId>
+    <label>AI Summary</label>
+    <length>4000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+</CustomField>

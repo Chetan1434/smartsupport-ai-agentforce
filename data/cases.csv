@@ -1,0 +1,12 @@
+Subject,Description,Origin,Priority,SuppliedName,SuppliedEmail
+Password reset link never arrives,I requested a password reset three times and no e-mail arrives. Please help me get back in.,Web,Medium,Avery Quill,avery.quill@example.invalid
+Cannot log in after changing phone,Login fails with an invalid verification code after I changed phones. I cannot sign in.,Email,Medium,Devon Park,devon.park@example.invalid
+Locked out of account repeatedly,My account is locked after several login attempts and the unlock e-mail does not work.,Phone,Medium,Emery Stone,emery.stone@example.invalid
+Charged twice on the March invoice,I see a duplicate charge on my invoice and want a refund. This billing dispute is unacceptable.,Email,Medium,Casey Moreno,casey.moreno@example.invalid
+Invoice amount does not match quote,The invoice total is higher than the agreed quote. Please review the billing.,Web,Medium,Casey Moreno,casey.moreno@example.invalid
+Scanner arrives with a cracked screen,The device was delivered with a cracked screen and the unit is defective.,Web,Medium,Blake Hartwell,blake.hartwell@example.invalid
+Product stops working after update,The device freezes after the latest firmware update. This looks like a product defect.,Email,Medium,Blake Hartwell,blake.hartwell@example.invalid
+Service is down for all users,Our whole team cannot reach the platform. This is a widespread outage and nobody can work.,Phone,Medium,Avery Quill,avery.quill@example.invalid
+Suspicious logins - unauthorized access,We found unauthorized access to our admin account and think there may be a data breach.,Phone,Medium,Avery Quill,avery.quill@example.invalid
+Please connect me with a person,I want to speak to a human agent about my open order. Please escalate.,Web,Medium,Emery Stone,emery.stone@example.invalid
+General question about the partner program,Do you offer a partner program for resellers?,Web,Low,Devon Park,devon.park@example.invalid

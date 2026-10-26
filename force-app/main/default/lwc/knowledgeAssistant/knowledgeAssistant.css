@@ -1,0 +1,13 @@
+.assistant-body {
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.spinner-box {
+    position: relative;
+    min-height: 2.5rem;
+}
+
+.answer {
+    white-space: pre-wrap;
+}

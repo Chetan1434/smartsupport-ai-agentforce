@@ -1,0 +1,111 @@
+<template>
+    <lightning-card title="SmartSupport Dashboard" icon-name="standard:dashboard">
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refresh dashboard"
+            title="Refresh dashboard"
+            onclick={handleRefresh}
+        ></lightning-button-icon>
+
+        <div class="slds-var-p-horizontal_medium">
+            <template if:true={isLoading}>
+                <div class="loading-box">
+                    <lightning-spinner alternative-text="Loading dashboard" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error slds-var-p-vertical_small" role="alert">{errorMessage}</div>
+            </template>
+
+            <template if:true={hasData}>
+                <div class="metrics slds-var-m-bottom_medium">
+                    <template for:each={metrics} for:item="metric">
+                        <div key={metric.key} class={metric.cssClass}>
+                            <div class="metric-value">{metric.value}</div>
+                            <div class="metric-label">{metric.label}</div>
+                        </div>
+                    </template>
+                </div>
+
+                <h3 class="slds-text-heading_small slds-var-m-bottom_x-small">Needs attention</h3>
+                <template if:true={hasAttentionCases}>
+                    <div class="slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="Cases that need attention">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Case</th>
+                                    <th scope="col">Priority</th>
+                                    <th scope="col">Sentiment</th>
+                                    <th scope="col">Owner</th>
+                                    <th scope="col">Recommended next action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={attentionRows} for:item="row">
+                                    <tr key={row.id}>
+                                        <th scope="row">
+                                            <a href="#" data-id={row.id} onclick={handleOpenCase}>{row.caseNumber}</a>
+                                            <div class="slds-text-body_small">{row.subject}</div>
+                                            <template if:true={row.humanHandoffRequired}>
+                                                <span class="slds-badge slds-theme_warning">Awaiting human</span>
+                                            </template>
+                                        </th>
+                                        <td><span class={row.priorityClass}>{row.priority}</span></td>
+                                        <td><span class={row.sentimentClass}>{row.sentimentLabel}</span></td>
+                                        <td>{row.ownerName}</td>
+                                        <td class="wrap-cell">{row.recommendedAction}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasAttentionCases}>
+                    <p class="slds-text-color_weak slds-var-m-bottom_small">No high-priority cases or cases awaiting a human.</p>
+                </template>
+
+                <div class="slds-grid slds-wrap slds-gutters_small slds-var-m-top_medium">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <h3 class="slds-text-heading_small slds-var-m-bottom_x-small">Open cases by category</h3>
+                        <template if:true={hasCategories}>
+                            <template for:each={categoryRows} for:item="cat">
+                                <div key={cat.label} class="category-row">
+                                    <div class="category-label">{cat.label}</div>
+                                    <div class="category-bar-track">
+                                        <div class="category-bar" style={cat.barStyle}></div>
+                                    </div>
+                                    <div class="category-count">{cat.total}</div>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={hasCategories}>
+                            <p class="slds-text-color_weak">No open cases.</p>
+                        </template>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <h3 class="slds-text-heading_small slds-var-m-bottom_x-small">Recent AI interactions</h3>
+                        <template if:true={hasInteractions}>
+                            <ul class="slds-has-dividers_bottom-space">
+                                <template for:each={interactionRows} for:item="log">
+                                    <li key={log.id} class="slds-item">
+                                        <span class="slds-text-body_small slds-text-color_weak">{log.when}</span>
+                                        <div>
+                                            <strong>{log.interactionType}</strong>
+                                            <template if:true={log.caseNumber}> on case {log.caseNumber}</template>
+                                        </div>
+                                        <div class="slds-text-body_small">{log.outcome} · {log.source}</div>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template if:false={hasInteractions}>
+                            <p class="slds-text-color_weak">No AI interactions recorded yet.</p>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

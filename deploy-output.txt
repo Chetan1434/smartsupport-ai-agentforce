@@ -1,0 +1,26 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261026005608
+Username: CHETAN\cheta
+RunAs User: CHETAN\cheta
+Configuration Name: 
+Machine: CHETAN (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 22516
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is deploy-output.txt
+PS C:\Users\cheta\OneDrive\Desktop\smartsupport-ai (1)\smartsupport-ai> .\scripts\deploy.ps1 -Org smartsupport2 -CheckOnly
+
+PS C:\Users\cheta\OneDrive\Desktop\smartsupport-ai (1)\smartsupport-ai> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20261026005901
+**********************

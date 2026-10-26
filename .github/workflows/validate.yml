@@ -1,0 +1,32 @@
+name: validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  lwc-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npm run test:unit
+  project-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python3 scripts/validate_project.py
+  org-validation:
+    # Optional: runs only when the SFDX_AUTH_URL secret is configured (sandbox/scratch org). Never commit the auth URL.
+    if: ${{ vars.ENABLE_ORG_VALIDATION == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --global @salesforce/cli
+      - run: echo "${{ secrets.SFDX_AUTH_URL }}" > auth.txt && sf org login sfdx-url --sfdx-url-file auth.txt --alias ci && rm auth.txt
+      - run: sf project deploy validate --manifest manifest/package.xml --target-org ci --test-level RunSpecifiedTests --tests AIInteractionLogServiceTest --tests AgentforceActionsTest --tests CaseActionServiceTest --tests CaseIntelligenceServiceTest --tests CaseRoutingRulesTest --tests CaseTriggerHandlerTest --tests CustomerContextServiceTest --tests FlowActionsTest --tests KnowledgeSearchServiceTest --tests QueueRoutingServiceTest --tests SupportControllersTest --tests SupportEscalationServiceTest

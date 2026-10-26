@@ -1,0 +1,29 @@
+# Salesforce CLI / local state
+.sfdx/
+.sf/
+.localdevserver/
+.vscode/settings.json
+.vscode/launch.json
+deploy-results/
+test-results/
+apex-tests/
+
+# Credentials and auth files must never be committed
+*.key
+*.pem
+*.crt
+*authurl*
+sfdx-auth-url*.txt
+.env
+.env.*
+
+# Node
+node_modules/
+npm-debug.log*
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+*.tmp

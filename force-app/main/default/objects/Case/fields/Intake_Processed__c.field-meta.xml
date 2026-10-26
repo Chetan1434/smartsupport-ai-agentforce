@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Intake_Processed__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Set to true after the SmartSupport intake rules ran. Prevents repeated processing of the same case.</description>
+    <externalId>false</externalId>
+    <label>Intake Processed</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

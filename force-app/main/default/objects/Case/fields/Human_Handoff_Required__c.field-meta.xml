@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Human_Handoff_Required__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>True when the case must be handled by a human agent (escalation rule, customer request, repeated AI failure, or insufficient knowledge).</description>
+    <externalId>false</externalId>
+    <label>Human Handoff Required</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

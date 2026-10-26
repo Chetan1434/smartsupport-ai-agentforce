@@ -1,0 +1,92 @@
+<template>
+    <lightning-card title="Case Intelligence" icon-name="standard:case_wrap_up">
+        <div slot="actions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh analysis"
+                title="Refresh analysis"
+                disabled={isBusy}
+                onclick={handleRefresh}
+            ></lightning-button-icon>
+        </div>
+
+        <div class="slds-var-p-horizontal_medium panel-body">
+            <template if:true={isBusy}>
+                <lightning-spinner alternative-text="Analysing case" size="small"></lightning-spinner>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error" role="alert">{errorMessage}</div>
+            </template>
+
+            <template if:true={insight}>
+                <template if:true={insight.escalationRecommended}>
+                    <div class="slds-notify slds-notify_alert slds-alert_warning slds-var-m-bottom_small" role="alert">
+                        <span class="slds-assistive-text">Escalation</span>
+                        <h2>
+                            Human handoff required: {escalationReasonLabel}
+                        </h2>
+                    </div>
+                </template>
+
+                <div class="slds-text-title slds-var-m-bottom_xx-small">Summary</div>
+                <p class="slds-var-m-bottom_small">{insight.summary}</p>
+
+                <dl class="slds-list_horizontal slds-wrap facts">
+                    <dt class="slds-item_label slds-text-color_weak">Issue category</dt>
+                    <dd class="slds-item_detail">{insight.issueCategory}</dd>
+
+                    <dt class="slds-item_label slds-text-color_weak">Sentiment</dt>
+                    <dd class="slds-item_detail">
+                        <span class={sentimentClass}>
+                            <lightning-icon icon-name={sentimentIconName} size="xx-small" class="slds-var-m-right_xx-small"></lightning-icon>
+                            {insight.sentiment}
+                        </span>
+                    </dd>
+
+                    <dt class="slds-item_label slds-text-color_weak">Current priority</dt>
+                    <dd class="slds-item_detail">{insight.priority}</dd>
+
+                    <dt class="slds-item_label slds-text-color_weak">Recommended priority</dt>
+                    <dd class="slds-item_detail">
+                        <span class={recommendedPriorityClass}>{insight.recommendedPriority}</span>
+                        <span class="slds-text-body_small slds-text-color_weak"> (recommendation only)</span>
+                    </dd>
+
+                    <dt class="slds-item_label slds-text-color_weak">Recommended queue</dt>
+                    <dd class="slds-item_detail">{insight.recommendedQueue}</dd>
+
+                    <dt class="slds-item_label slds-text-color_weak">Failed automated attempts</dt>
+                    <dd class="slds-item_detail">{insight.failedAttempts}</dd>
+                </dl>
+
+                <div class="slds-text-title slds-var-m-top_small slds-var-m-bottom_xx-small">Recommended next action</div>
+                <p>{insight.recommendedAction}</p>
+
+                <template if:true={hasSteps}>
+                    <div class="slds-text-title slds-var-m-top_small slds-var-m-bottom_xx-small">Suggested troubleshooting steps</div>
+                    <ol class="slds-list_ordered steps">
+                        <template for:each={stepItems} for:item="step">
+                            <li key={step.key}>{step.text}</li>
+                        </template>
+                    </ol>
+                </template>
+
+                <div class="slds-text-title slds-var-m-top_small slds-var-m-bottom_xx-small">Why this recommendation</div>
+                <p class="slds-text-body_small">{insight.explanation}</p>
+
+                <div class="slds-var-m-top_medium">
+                    <lightning-button
+                        label="Save summary to case"
+                        variant="neutral"
+                        disabled={isBusy}
+                        onclick={handleSave}
+                    ></lightning-button>
+                    <span class="slds-text-body_small slds-text-color_weak slds-var-m-left_small">
+                        Saves the summary and recommendations. Priority and owner are never changed by this button.
+                    </span>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

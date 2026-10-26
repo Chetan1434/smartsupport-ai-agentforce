@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Runs the same intake logic as the Case trigger (CaseIntelligenceService). Does nothing when the case was already processed.</description>
+        <name>Run_Case_Intake</name>
+        <label>Run Case Intake</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>FlowActionCaseIntake</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Record_Failure</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>FlowActionCaseIntake</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <assignments>
+        <description>Fault path: keep the failure text. Case creation is never blocked by this flow.</description>
+        <name>Record_Failure</name>
+        <label>Record Failure</label>
+        <locationX>440</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>failureMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Safety net for case intake. Cases are normally classified by the Case trigger; this flow processes cases created while the trigger automation was not active (Intake_Processed__c = false). Shares all logic with the trigger through FlowActionCaseIntake.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartSupport Case Intake {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartSupport Case Intake</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Run_Case_Intake</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Intake_Processed__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>failureMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

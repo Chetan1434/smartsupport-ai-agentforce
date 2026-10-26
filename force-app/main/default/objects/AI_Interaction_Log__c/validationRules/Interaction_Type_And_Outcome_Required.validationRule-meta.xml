@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interaction_Type_And_Outcome_Required</fullName>
+    <active>true</active>
+    <description>Every audit record must state what happened and with what outcome.</description>
+    <errorConditionFormula>OR(ISBLANK(TEXT(Interaction_Type__c)), ISBLANK(TEXT(Outcome__c)))</errorConditionFormula>
+    <errorMessage>Interaction Type and Outcome are required on every AI Interaction Log.</errorMessage>
+</ValidationRule>

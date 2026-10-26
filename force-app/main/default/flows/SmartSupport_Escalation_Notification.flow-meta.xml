@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Sends ONE custom notification to the case owner or queue members. Skips cases already notified.</description>
+        <name>Notify_Escalation</name>
+        <label>Notify Escalation</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>FlowActionEscalationNotification</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Was_Notification_Sent</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Record_Failure</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>FlowActionEscalationNotification</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <assignments>
+        <description>Fault path: keep the failure text; Escalation_Notified__c stays false so a later qualifying change can retry.</description>
+        <name>Record_Failure</name>
+        <label>Record Failure</label>
+        <locationX>440</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>failureMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Was_Notification_Sent</name>
+        <label>Was Notification Sent</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Not sent</defaultConnectorLabel>
+        <rules>
+            <name>Sent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Notify_Escalation.sent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Mark_Notified</targetReference>
+            </connector>
+            <label>Sent</label>
+        </rules>
+    </decisions>
+    <description>Escalation management. When a case needs a human (Human_Handoff_Required__c = true) and nobody was notified yet, sends the configured custom notification once and sets Escalation_Notified__c so the same escalation can never notify twice. The escalation reason, priority and queue are set by the Case trigger / SupportEscalationService.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartSupport Escalation Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartSupport Escalation Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Marks the escalation as notified (duplicate protection).</description>
+        <name>Mark_Notified</name>
+        <label>Mark Notified</label>
+        <locationX>44</locationX>
+        <locationY>539</locationY>
+        <faultConnector>
+            <targetReference>Record_Failure</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Escalation_Notified__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Notify_Escalation</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Human_Handoff_Required__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Escalation_Notified__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>failureMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

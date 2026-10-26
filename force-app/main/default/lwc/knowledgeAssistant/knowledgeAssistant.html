@@ -1,0 +1,83 @@
+<template>
+    <lightning-card title="Knowledge Assistant" icon-name="standard:knowledge">
+        <div class="slds-var-p-horizontal_medium assistant-body">
+            <lightning-textarea
+                name="question"
+                label="Ask a question"
+                placeholder="For example: How do I reset my password?"
+                max-length={maxLength}
+                value={question}
+                message-when-too-long="Please shorten the question."
+                onchange={handleQuestionChange}
+                onkeydown={handleKeyDown}
+            ></lightning-textarea>
+            <div class="slds-text-body_small slds-text-color_weak slds-var-m-bottom_small">{remainingText}</div>
+
+            <lightning-button
+                label="Search Knowledge"
+                variant="brand"
+                disabled={isSearchDisabled}
+                onclick={handleSearch}
+            ></lightning-button>
+
+            <template if:true={isLoading}>
+                <div class="spinner-box">
+                    <lightning-spinner alternative-text="Searching Knowledge" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error slds-var-m-top_small" role="alert">{errorMessage}</div>
+            </template>
+
+            <template if:true={result}>
+                <div class="slds-var-m-top_medium" aria-live="polite">
+                    <template if:true={isFound}>
+                        <div class="slds-text-title slds-var-m-bottom_xx-small">Answer (from approved Knowledge)</div>
+                        <p class="answer">{result.answer}</p>
+
+                        <div class="slds-text-title slds-var-m-top_small slds-var-m-bottom_xx-small">Sources</div>
+                        <ul class="slds-list_dotted">
+                            <template for:each={articleItems} for:item="article">
+                                <li key={article.id}>
+                                    <a href="#" data-id={article.id} onclick={handleOpenArticle}>{article.title}</a>
+                                    <span class="slds-text-body_small slds-text-color_weak"> · matched {article.matchedTerms} term(s)</span>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+
+                    <template if:false={isFound}>
+                        <div class="slds-notify slds-notify_alert slds-alert_warning" role="status">
+                            <span class="slds-assistive-text">Notice</span>
+                            <h2>{result.message}</h2>
+                        </div>
+                    </template>
+
+                    <template if:true={result.humanRecommended}>
+                        <div class="slds-var-m-top_small">
+                            <template if:true={hasCase}>
+                                <lightning-button
+                                    label="Request human support"
+                                    variant="destructive-text"
+                                    disabled={isRequestingHuman}
+                                    onclick={handleRequestHuman}
+                                ></lightning-button>
+                            </template>
+                            <template if:false={hasCase}>
+                                <p class="slds-text-body_small">
+                                    A human agent can help. Create a case in the Case Actions panel, or open this
+                                    component on a case record, to request human support.
+                                </p>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={humanMessage}>
+                <div class="slds-text-color_success slds-var-m-top_small" role="status">{humanMessage}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

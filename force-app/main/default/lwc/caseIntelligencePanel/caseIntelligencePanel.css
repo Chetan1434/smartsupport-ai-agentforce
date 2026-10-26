@@ -1,0 +1,12 @@
+.panel-body {
+    position: relative;
+    min-height: 4rem;
+}
+
+.facts {
+    row-gap: 0.25rem;
+}
+
+.steps {
+    margin-left: 1.25rem;
+}

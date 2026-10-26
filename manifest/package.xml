@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Core SmartSupport AI deployment. Requires no Agentforce, Data Cloud or external LLM licence.
+     Excludes optional/external-llm. API version matches sfdx-project.json sourceApiVersion. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types><members>AIInteractionLogService</members><members>AIInteractionLogServiceTest</members><members>AgentActionAddComment</members><members>AgentActionClassifyCase</members><members>AgentActionCreateCase</members><members>AgentActionEscalateCase</members><members>AgentActionGetCaseStatus</members><members>AgentActionSearchKnowledge</members><members>AgentActionSummarizeCase</members><members>AgentforceActionService</members><members>AgentforceActionsTest</members><members>CaseActionService</members><members>CaseActionServiceTest</members><members>CaseIntelligenceService</members><members>CaseIntelligenceServiceTest</members><members>CaseRoutingRules</members><members>CaseRoutingRulesTest</members><members>CaseTriggerHandler</members><members>CaseTriggerHandlerTest</members><members>CustomerContextService</members><members>CustomerContextServiceTest</members><members>FlowActionCaseIntake</members><members>FlowActionEscalationNotification</members><members>FlowActionsTest</members><members>KnowledgeSearchService</members><members>KnowledgeSearchServiceTest</members><members>QueueRoutingService</members><members>QueueRoutingServiceTest</members><members>SupportAssistantController</members><members>SupportConstants</members><members>SupportControllersTest</members><members>SupportDashboardController</members><members>SupportEscalationService</members><members>SupportEscalationServiceTest</members><members>SupportException</members><members>SupportTestDataFactory</members><name>ApexClass</name></types>
+    <types><members>*</members><name>ApexTrigger</name></types>
+    <types><members>*</members><name>LightningComponentBundle</name></types>
+    <types><members>Account.Support_Tier__c</members>
+        <members>AI_Interaction_Log__c.Case__c</members><members>AI_Interaction_Log__c.Interaction_Type__c</members><members>AI_Interaction_Log__c.Request_Category__c</members><members>AI_Interaction_Log__c.Suggested_Priority__c</members><members>AI_Interaction_Log__c.Sentiment__c</members><members>AI_Interaction_Log__c.Recommended_Action__c</members><members>AI_Interaction_Log__c.Human_Handoff_Required__c</members><members>AI_Interaction_Log__c.Outcome__c</members><members>AI_Interaction_Log__c.Source__c</members><members>AI_Interaction_Log__c.Error_Message__c</members>
+        <members>Case.Issue_Category__c</members><members>Case.Sentiment__c</members><members>Case.AI_Summary__c</members><members>Case.AI_Recommended_Priority__c</members><members>Case.AI_Recommended_Action__c</members><members>Case.Human_Handoff_Required__c</members><members>Case.Escalation_Reason__c</members><members>Case.Escalation_Notified__c</members><members>Case.Intake_Processed__c</members><members>Case.AI_Failed_Attempts__c</members>
+        <members>Queue_Mapping__mdt.Queue_Developer_Name__c</members><members>Queue_Mapping__mdt.Is_Active__c</members>
+        <members>Support_Setting__mdt.Case_Automation_Enabled__c</members><members>Support_Setting__mdt.Handoff_Failed_Attempt_Threshold__c</members><members>Support_Setting__mdt.Knowledge_Min_Matched_Terms__c</members><members>Support_Setting__mdt.Knowledge_Max_Results__c</members><members>Support_Setting__mdt.External_LLM_Enabled__c</members><members>Support_Setting__mdt.External_LLM_Model__c</members>
+        <name>CustomField</name></types>
+    <types><members>AI_Interaction_Log__c</members><members>Queue_Mapping__mdt</members><members>Support_Setting__mdt</members><name>CustomObject</name></types>
+    <types><members>Case.AI_Failed_Attempts_Non_Negative</members><members>AI_Interaction_Log__c.Interaction_Type_And_Outcome_Required</members><name>ValidationRule</name></types>
+    <types><members>Queue_Mapping.Account_Access</members><members>Queue_Mapping.Billing</members><members>Queue_Mapping.General</members><members>Queue_Mapping.Product_Defect</members><members>Queue_Mapping.Security</members><members>Queue_Mapping.Shipping</members><members>Queue_Mapping.Technical</members><members>Queue_Mapping.Urgent_Escalation</members><members>Support_Setting.Default</members><name>CustomMetadata</name></types>
+    <types><members>*</members><name>Flow</name></types>
+    <types><members>*</members><name>PermissionSet</name></types>
+    <types><members>*</members><name>Queue</name></types>
+    <types><members>SmartSupport_Escalation</members><name>CustomNotificationType</name></types>
+    <types><members>SmartSupport</members><name>CustomApplication</name></types>
+    <types><members>AI_Interaction_Log__c</members><members>SmartSupport_Home</members><name>CustomTab</name></types>
+    <types><members>SmartSupport_Home</members><name>FlexiPage</name></types>
+    <types><members>AI_Interaction_Log__c.All</members><name>ListView</name></types>
+    <version>65.0</version>
+</Package>

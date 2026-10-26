@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OPTIONAL external LLM module. Deploy only AFTER the core manifest. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types><members>ExternalLLMService</members><members>AgentActionExternalLlmSummary</members><members>ExternalLLMServiceTest</members><name>ApexClass</name></types>
+    <version>65.0</version>
+</Package>

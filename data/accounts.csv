@@ -1,0 +1,6 @@
+Name,Type,Industry,Phone,Support_Tier__c
+Northwind Demo Traders,Customer - Direct,Retail,555-0101,Premium
+Contoso Sample Logistics,Customer - Direct,Transportation,555-0102,Standard
+Fabrikam Example Health,Customer - Channel,Healthcare,555-0103,Premium
+Tailspin Demo Outfitters,Customer - Direct,Apparel,555-0104,Standard
+Adventure Sample Works,Customer - Direct,Manufacturing,555-0105,Standard

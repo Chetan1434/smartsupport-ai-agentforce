@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Adds the reviewed suggestion as an INTERNAL comment (never visible to the customer).</description>
+        <name>Add_Internal_Comment</name>
+        <label>Add Internal Comment</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <actionName>AgentActionAddComment</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>comment</name>
+            <value>
+                <elementReference>CommentText</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>AgentActionAddComment</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <description>Rule-based baseline summary. If an Einstein prompt template is configured (docs/agentforce-setup.md) it can replace this action. A failure leads to the manual fallback screen.</description>
+        <name>Summarize_Case</name>
+        <label>Summarize Case</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <actionName>AgentActionSummarizeCase</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Summary_Succeeded</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Unavailable_Screen</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>AgentActionSummarizeCase</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <decisions>
+        <name>Summary_Succeeded</name>
+        <label>Summary Succeeded</label>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Unavailable_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not available</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Summarize_Case.success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Review_Screen</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>AI-assisted resolution with a human in the loop. Summarizes the case, shows the suggestion to the agent and only posts it as an INTERNAL comment when the agent presses the explicit button. If the summary is unavailable the flow shows a manual-handling message and never blocks case processing.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartSupport AI Assisted Resolution {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartSupport AI Assisted Resolution</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <description>Human review gate. Nothing is posted unless the agent presses the button.</description>
+        <name>Review_Screen</name>
+        <label>Review Suggestion</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Add_Internal_Comment</targetReference>
+        </connector>
+        <fields>
+            <name>Review_Text</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Suggested summary&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Summarize_Case.summary}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Recommended action&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Summarize_Case.recommendedAction}&lt;/p&gt;&lt;p&gt;&lt;i&gt;This is an automated suggestion. Review it before you post it. Pressing the button below adds it as an internal comment only. Closing this window posts nothing.&lt;/i&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Post as internal comment</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Safe fallback when no suggestion could be produced.</description>
+        <name>Unavailable_Screen</name>
+        <label>Suggestion Unavailable</label>
+        <locationX>578</locationX>
+        <locationY>539</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Unavailable_Text</name>
+            <fieldText>&lt;p&gt;An automatic suggestion could not be created for this case. Please handle it manually. Nothing was changed.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Summarize_Case</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>CommentText</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>SmartSupport suggestion (reviewed by a human before posting). Summary: {!Summarize_Case.summary} Recommended action: {!Summarize_Case.recommendedAction}</text>
+    </textTemplates>
+    <variables>
+        <description>Id of the case; passed in automatically when the flow runs from a Case quick action.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

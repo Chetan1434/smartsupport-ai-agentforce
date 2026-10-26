@@ -1,0 +1,17 @@
+{
+  "name": "smartsupport-ai",
+  "private": true,
+  "version": "1.0.0",
+  "description": "SmartSupport AI - Agentforce-powered intelligent customer service automation (Salesforce DX project)",
+  "scripts": {
+    "test:unit": "sfdx-lwc-jest",
+    "test:unit:watch": "sfdx-lwc-jest --watch",
+    "test:unit:coverage": "sfdx-lwc-jest --coverage"
+  },
+  "devDependencies": {
+    "@salesforce/sfdx-lwc-jest": "^7.0.1"
+  },
+  "volta": {
+    "node": "20.18.0"
+  }
+}
